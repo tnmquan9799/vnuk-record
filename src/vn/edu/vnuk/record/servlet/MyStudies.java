@@ -12,21 +12,14 @@ public class MyStudies extends HttpServlet {
 	
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding ("UTF-8");
+		response.setContentType ("text / html; charset = UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<meta charset=\"UTF-8\">");
 		out.println("<title>My Studies</title>");
-		out.println("<style>");
-		out.println("th, td {border: 2px solid #999;");
-		out.println("text-align: left;");
-		out.println("padding: 8px;}");
-		out.println("table {font-family: arial, sans-serif;");
-		out.println("border-collapse: collapse;");
-		out.println("width: 100%;}");
-		out.println("tr:nth-child(even) {background-color: #fff;}");
-		out.println("tr:nth-child(odd) {background-color: #ffe6e6;}");
-		out.println("</style>");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/MyStudies.css\">");
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<table>");
