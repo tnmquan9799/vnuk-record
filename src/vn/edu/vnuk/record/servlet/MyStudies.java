@@ -17,7 +17,6 @@ public class MyStudies extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.println("<html>");
 		out.println("<head>");
-		out.println("<meta charset=\"UTF-8\">");
 		out.println("<title>My Studies</title>");
 		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/MyStudies.css\">");
 		out.println("</head>");
