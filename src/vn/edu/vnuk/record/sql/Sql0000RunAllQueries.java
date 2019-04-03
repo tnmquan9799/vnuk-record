@@ -3,7 +3,7 @@ package vn.edu.vnuk.record.sql;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import vn.edu.vnuk.jdbc.ConnectionFactory;
+import vn.edu.vnuk.record.jdbc.ConnectionFactory;
 
 public class Sql0000RunAllQueries {
 

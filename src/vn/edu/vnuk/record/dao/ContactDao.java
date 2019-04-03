@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
-import vn.edu.vnuk.jdbc.ConnectionFactory;
+import vn.edu.vnuk.record.jdbc.ConnectionFactory;
 import vn.edu.vnuk.record.model.Contact;
 
 public class ContactDao {
