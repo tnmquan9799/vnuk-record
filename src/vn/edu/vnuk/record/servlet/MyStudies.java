@@ -18,7 +18,7 @@ public class MyStudies extends HttpServlet {
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<title>My Studies</title>");
-		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/MyStudies.css\">");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/my-studies.css\">");
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<table>");
