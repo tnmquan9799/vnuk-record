@@ -13,14 +13,14 @@ public class Sql5010InsertIntoContacts {
 	public Sql5010InsertIntoContacts(Connection connection) {
 		this.connection = connection;
 		
-		this.sqlQuery = "insert into contacts (name, email, address, date_of_register) "
+		this.sqlQuery = "insert into contacts (name, email, address, date_of_birth) "
                 +	"values (?, ?, ?, ?)";
 	}
 	
 	public void run() throws SQLException {
 
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println(">  Sql5010InsertIntoCategories started");
+		System.out.println(">  Sql5010InsertIntoContacts started");
 		
 		PreparedStatement statement;
 		
@@ -39,7 +39,7 @@ public class Sql5010InsertIntoContacts {
             // 	Executing statement
 			statement.execute();
 			statement.close();
-	        System.out.println("   DATA successfully loaded in \'categories\'");
+	        System.out.println("   DATA successfully loaded in \'contacts\'");
 		
 		}
 		
@@ -49,7 +49,7 @@ public class Sql5010InsertIntoContacts {
 		}
 		
 		finally {
-			System.out.println("<  Sql5010InsertIntoCategories ended");
+			System.out.println("<  Sql5010InsertIntoContacts ended");
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			System.out.println("");
 		}
