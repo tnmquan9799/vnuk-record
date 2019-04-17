@@ -3,52 +3,51 @@ package vn.edu.vnuk.record.model;
 import java.util.Calendar;
 
 public class Contact {
-	private long id;
+	
+	private Long id;
 	private String name;
 	private String email;
 	private String address;
 	private Calendar dateOfBirth;
 	
-	
-	public long getId() {
-		return id;
-	}
-	
-	public void setId(long id) {
-		this.id = id;
-	}
-	
+	// get and set methods for each property
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String newName) {
+		this.name = newName;
 	}
-	
+
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 	
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail(String newEmail) {
+		this.email = newEmail;
 	}
 	
 	public String getAddress() {
-		return address;
+		return this.address;
 	}
 	
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAddress(String newAddress) {
+		this.address = newAddress;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+	public void setId(Long newId) {
+		this.id = newId;
 	}
 	
 	public Calendar getDateOfBirth() {
-		return dateOfBirth;
+		return this.dateOfBirth;
 	}
 	
-	public void setDateOfBirth(Calendar dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setDateOfBirth(Calendar newDateOfBirth) {
+		this.dateOfBirth = newDateOfBirth;
 	}
-	
-	
 }

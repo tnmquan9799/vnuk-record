@@ -1,237 +1,192 @@
 package vn.edu.vnuk.record.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Scanner;
 
 import vn.edu.vnuk.record.jdbc.ConnectionFactory;
 import vn.edu.vnuk.record.model.Contact;
 
 public class ContactDao {
-	private Connection connection;
-    Scanner sc = new Scanner(System.in);
-
-	public ContactDao() {
-		this.connection = new ConnectionFactory().getConnection();
-	}
 	
-	public void create(Contact contact) throws SQLException {
+    private Connection connection;
 
-		
-		String sqlQuery = "insert into contacts (name, email, address, date_of_birth)"
-                +	"values (?, ?, ?, ?)";
-		
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println(">  Sql5010InsertIntoCategories started");
-		
-		PreparedStatement statement;
-		
-		try {
-			statement = connection.prepareStatement(sqlQuery);
+    public ContactDao(){
+        this.connection = new ConnectionFactory().getConnection();
+    }
+
+
+    //  CREATE
+    public void create(Contact contact) throws SQLException{
+
+        String sqlQuery = "insert into contacts (name, email, address, date_of_birth) "
+                        +	"values (?, ?, ?, ?)";
+
+        PreparedStatement statement;
+
+        try {
+                statement = connection.prepareStatement(sqlQuery);
+
+                //	Replacing "?" through values
+                statement.setString(1, contact.getName());
+                statement.setString(2, contact.getEmail());
+                statement.setString(3, contact.getAddress());
+                statement.setDate(4, new Date(contact.getDateOfBirth().getTimeInMillis()));
+
+                // 	Executing statement
+                statement.execute();
+
+                System.out.println("New record in DB !");
+
+        } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+        } finally {
+                System.out.println("Done !");
+        }
+
+    }
+    
+    
+    //  READ (List of Contacts)
+    @SuppressWarnings("finally")
+    public List<Contact> read() throws SQLException {
+
+        String sqlQuery = "select * from contacts";
+        PreparedStatement statement;
+        List<Contact> contacts = new ArrayList<Contact>();
+
+        try {
+
+            statement = connection.prepareStatement(sqlQuery);
+
+            // 	Executing statement
+            ResultSet results = statement.executeQuery();
+
+            while(results.next()){
+
+                Contact contact = new Contact();
+                contact.setId(results.getLong("id"));
+                contact.setName(results.getString("name"));
+                contact.setEmail(results.getString("email"));
+                contact.setAddress(results.getString("address"));
+
+                Calendar date = Calendar.getInstance();
+                date.setTime(results.getDate("date_of_birth"));
+                contact.setDateOfBirth(date);
+
+                contacts.add(contact);
+
+            }
+
+            results.close();
+            statement.close();
+
+
+        } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+        } finally {
+                return contacts;
+        }
+
+
+    }
+
+
+    //  READ (Single Contact)
+    @SuppressWarnings("finally")
+    public Contact read(int id) throws SQLException{
+
+        String sqlQuery = "select * from contacts where id=?";
+
+        PreparedStatement statement;
+        Contact contact = new Contact();
+
+        try {
+            statement = connection.prepareStatement(sqlQuery);
 
             //	Replacing "?" through values
+            statement.setLong(1, id);
+
+            // 	Executing statement
+            ResultSet results = statement.executeQuery();
+
+            if(results.next()){
+
+                contact.setId(results.getLong("id"));
+                contact.setName(results.getString("name"));
+                contact.setEmail(results.getString("email"));
+                contact.setAddress(results.getString("address"));
+
+                Calendar date = Calendar.getInstance();
+                date.setTime(results.getDate("date_of_birth"));
+                contact.setDateOfBirth(date);
+
+            }
+
+            statement.close();
+
+        } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+        } finally {
+                return contact;
+        }
+
+    }
+
+
+    //  UPDATE
+    public void update(Contact contact) throws SQLException {
+        String sqlQuery = "update contacts set name=?, email=?," 
+                            + "address=?, date_of_birth=? where id=?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
             statement.setString(1, contact.getName());
             statement.setString(2, contact.getEmail());
             statement.setString(3, contact.getAddress());
-            statement.setDate(4, new java.sql.Date(
-            		contact.getDateOfBirth()
-            		.getTimeInMillis()
-            		)
-            	);
+            statement.setDate(4, new Date(contact.getDateOfBirth().getTimeInMillis()));
+            statement.setLong(5, contact.getId());
+            statement.execute();
+            statement.close();
+            
+            System.out.println("Contact successfully modified.");
+        } 
 
-            // 	Executing statement
-			statement.execute();
-			statement.close();
-	        System.out.println("   DATA successfully loaded in \'categories\'");
-		
-		}
-		
-		catch (Exception e) {
-	        e.printStackTrace();
-	        connection.close();
-		}
-		
-		finally {
-			System.out.println("<  Sql5010InsertIntoCategories ended");
-			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			System.out.println("");
-			connection.close();
-		}
-	}
-	
-	@SuppressWarnings("finally")
-	public List<Contact> read() throws SQLException {
-		
-		List<Contact> contacts = new ArrayList<Contact>();
-		String sqlQuery = "select * from contacts"
-                +	";";
-		
-		
-		PreparedStatement statement;
-		
-		try {
-			
-			statement = connection.prepareStatement(sqlQuery);
-			
-            // 	Executing statement
-			ResultSet results = statement.executeQuery();
-			
-			while(results.next()) {
-				contacts.add(buildContact(results));
-			}
-			
-			results.close();
-			statement.close();
-		}
-		
-		catch (Exception e) {
-	        e.printStackTrace();
-	        connection.close();
-		}
-		
-		finally {
-			System.out.println("<  Sql5010InsertIntoCategories ended");
-			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			System.out.println("");
-			connection.close();
-			return contacts;
-		}
-	}
-	
-	@SuppressWarnings("finally")
-	public Contact read(Long id) throws SQLException {
-		Contact contact = new Contact();
-		
-		String sqlQuery = "select * from contacts where id =" + id
-				+ ";";
-		
-		PreparedStatement statement;
-		
-		try {
-			statement = connection.prepareStatement(sqlQuery);
-			
-			ResultSet results = statement.executeQuery();
-			
-			if (results.next()) {
-				
-				contact = buildContact(results);
-			}
-				
-			results.close();
-			statement.close();
-		}
-		
-		catch(Exception e) {
-			e.printStackTrace();
-	        connection.close();
-		}
-		
-		finally {
-			
-			return contact;
-		}
-		
-		
-	}
-	
-	public void update(Long id, Contact newContact) throws SQLException {
-		
-		Contact contact = new Contact();
-		
-		String sqlQuery = "update contacts set name = ?, email = ?, address = ? where id = " + id;
-		
-		PreparedStatement statement;
-		
-		try {
-			contact = read(id);
-			statement = connection.prepareStatement(sqlQuery);
-			
-			statement.setString(1, newContact.getName());
-			statement.setString(2, newContact.getEmail());
-			statement.setString(3, newContact.getAddress());
-				
-			if(contact != null) {
-				int rowsUpdated = statement.executeUpdate();
-				
-				if(rowsUpdated > 0) {
-					System.out.println("Updated for ID number: " + id);
-				} else {
-					System.out.println("Error: ID NOT FOUND!");
-				}
-			} else {
-				System.out.println("Error: ID NOT FOUND!");
-			}
-			
-			statement.close();
-		}
-		
-		catch(Exception e) {
-			e.printStackTrace();
-			connection.close();
-		}
-		
-		finally {
-			connection.close();
-		}
-		
-		
-		
-	}
-	
-	public void delete(Long id) throws SQLException {
-		
-		
-		String sqlQuery = " delete from contacts where id = " + id
-				+ ";";
-		
-		PreparedStatement statement;
-		
-		try {
-			statement = connection.prepareStatement(sqlQuery);
-			
-			int rowsUpdated = statement.executeUpdate();
-			
-			if(rowsUpdated == 0) {
-				System.out.println("Error: ID NOT FOUND!");
-			} else {
-				System.out.println("Complete delete " + rowsUpdated + " row!");
-			}
-			
-			
-			
-			statement.close();
-		}
-		
-		catch(Exception e) {
-			e.printStackTrace();
-			connection.close();
-		}
-		
-		finally {
-			connection.close();
-		}
-		
-	}
-	
-	private Contact buildContact(ResultSet results) throws SQLException {
-		Contact	contact = new Contact();
-		
-		contact.setId(results.getLong("id"));
-		contact.setName(results.getString("name"));
-		contact.setAddress(results.getString("address"));
-		contact.setEmail(results.getString("email"));
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(results.getDate("date_of_birth"));
-		
-		contact.setDateOfBirth(calendar);
-		
-		return contact;
-	}
+        catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
+    
+    
+    //  DELETE
+    public void delete(Contact contact) throws SQLException {
+        String sqlQuery = "delete from contacts where id=?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setLong(1, contact.getId());
+            statement.execute();
+            statement.close();
+            
+            System.out.println("Contact successfully deleted.");
+
+        } 
+
+        catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
 }
-

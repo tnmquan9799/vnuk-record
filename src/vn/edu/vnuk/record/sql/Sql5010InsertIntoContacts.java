@@ -20,7 +20,7 @@ public class Sql5010InsertIntoContacts {
 	public void run() throws SQLException {
 
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println(">  Sql5010InsertIntoContacts started");
+		System.out.println(">  Sql5010InsertIntoCategories started");
 		
 		PreparedStatement statement;
 		
@@ -49,7 +49,7 @@ public class Sql5010InsertIntoContacts {
 		}
 		
 		finally {
-			System.out.println("<  Sql5010InsertIntoContacts ended");
+			System.out.println("<  Sql5010InsertIntoCategories ended");
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			System.out.println("");
 		}
